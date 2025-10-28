@@ -25,6 +25,15 @@ db.sequelize.sync()
         const komiks = await db.Komik.findAll();
         res.json(komiks);
     } catch (err) {
-        res.sendStatus(err);
+        res.send(err);
     }
   });
+
+    app.post('/komik', async (req, res) => {
+    try {
+        const komik = await db.Komik.create(req.body);
+        res.json(komik);
+    } catch (err) {
+        res.send(err);
+    }
+    });
