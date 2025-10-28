@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const db = require('./models');
-const port = 3309;
+const port = 3000
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,22 +30,23 @@ db.sequelize.sync()
   });
 
     app.post('/komik', async (req, res) => {
+    const data = req.body;
     try {
-        const komik = await db.Komik.create(req.body);
-        res.json(komik);
+        const komik = await db.Komik.create(data);
+        res.send(komik);
     } catch (err) {
         res.send(err);
     }
  });
 
  app.put('/komik/:id', async (req, res) => {
-    const { id } = req.params.id;
+    const id = req.params.id;
     const data = req.body;
 
     try {
-        const komik = await db.Komik.findbyPk(id);
+        const komik = await db.Komik.findByPk(id);
         if (!komik) {
-            return res.status(404).json({ message: 'Komik not found' });
+            return res.status(404).send({ message: 'Komik not found' });
         }
         await komik.update(data);
         res.send({ message: 'Komik updated successfully', komik });
@@ -55,11 +56,11 @@ db.sequelize.sync()
  });
 
 app.delete('/komik/:id', async (req, res) => {
-    const { id } = req.params.id;
+    const id  = req.params.id;
     try {
         const komik = await db.Komik.findByPk(id);
         if (!komik) {
-            return res.status(404).json({ message: 'Komik not found' });
+            return res.status(404).send({ message: 'Komik not found' });
         }
 
         await komik.destroy();
