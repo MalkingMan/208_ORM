@@ -1,21 +1,21 @@
 const express = require('express');
 const app = express();
-const db = require('./config/config.js');
+const db = require('./models');
 const port = 3309;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-    extended: true;
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+app.listen(port, async () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
 
 db.sequelize.sync()
-  .then((result) => {
-    app.listen(3309, () => {
-        console.log('Server is running on port 3309');
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
-})
+  })
   .catch((err) => {
-    console.log(err);
+    console.error('Failed to sync database:', err);
   });
