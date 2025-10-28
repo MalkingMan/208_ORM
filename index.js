@@ -19,3 +19,12 @@ db.sequelize.sync()
   .catch((err) => {
     console.error('Failed to sync database:', err);
   });
+
+  app.get('/komik', (req, res) => {
+    try {
+        const komiks = await db.Komik.findAll();
+        res.json(komiks);
+    } catch (err) {
+        res.sendStatus(err);
+    }
+  });
